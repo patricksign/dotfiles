@@ -1,0 +1,344 @@
+" PLUGIN
+ call plug#begin('~/.vim/plugged')
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'josa42/coc-go', {'branch': 'master'}
+
+ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
+Plug 'fatih/gomodifytags', {'branch':'main'}
+Plug 'scrooloose/nerdTree'
+Plug 'arcticicestudio/nord-vim'
+Plug 'gruvbox-community/gruvbox'
+
+Plug 'pechorin/any-jump.vim', {'branch': 'master'}
+Plug 'airblade/vim-gitgutter', {'branch': 'master'}
+Plug 'tpope/vim-fugitive', {'branch': 'master'}
+
+"--- tig blame
+Plug 'tveskag/nvim-blame-line'
+Plug 'iberianpig/tig-explorer.vim'
+Plug 'rbgrouleff/bclose.vim'
+
+Plug 'kdheepak/lazygit.nvim'
+Plug 'voldikss/vim-floaterm'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+" XML format
+Plug 'neovim/nvim-lspconfig'
+Plug 'iamcco/markdown-preview.nvim'
+
+" Plug 'neoclide/coc-solargraph'
+" Plug 'vim-ruby/vim-ruby'
+
+" Mark down edit
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+" Distraction-free writing
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+
+" Markdown syntax highlighting
+" tabular plugin is used to format tables
+" Plug 'godlygeek/tabular'
+" JSON front matter highlight plugin
+Plug 'elzr/vim-json'
+" Plug 'plasticboy/vim-markdown'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+
+" Markdown previewing
+Plug 'davidgranstrom/nvim-markdown-preview'
+
+" for vue
+Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+
+Plug 'sickill/vim-monokai'
+
+call plug#end()
+
+syntax on
+
+set ttyfast
+set noswapfile
+
+let g:loaded_ruby_provider = 0
+let g:loaded_perl_provider = 0
+
+let g:gruvbox_contrast_dark = 'hard' " soft
+set background=dark
+colorscheme gruvbox
+set termguicolors
+
+" BASIC
+let mapleader=" "
+set completeopt-=preview
+set autowrite
+set ignorecase
+set smartcase
+set updatetime=50
+set timeoutlen=500
+set number
+set relativenumber
+set cursorline
+
+" set options locally
+setlocal tabstop=4
+setlocal shiftwidth=4
+setlocal noexpandtab
+" Encoding
+set encoding=utf-8
+set fileencoding=utf-8
+" The encoding written to file
+set fileformats=unix
+set clipboard+=unnamedplus
+set mmp=900000
+
+
+"Markdown edit
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+"let g:UltiSnipsExpandTrigger="<tab>"  " use <Tab> to trigger autocompletion
+"let g:UltiSnipsJumpForwardTrigger="<C-j>"
+" let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+
+" Distraction-free writing
+" autocmd! User GoyoEnter Limelight
+" autocmd! User GoyoLeave Limelight!
+
+" Markdown syntax highlighting
+" disable header folding
+" let g:vim_markdown_folding_disabled = 0
+
+" do not use conceal feature, the implementation is not so good
+" let g:vim_markdown_conceal = 0
+
+" disable math tex conceal feature
+" let g:tex_conceal = ""
+" let g:vim_markdown_math = 1
+
+" support front matter of various format
+" let g:vim_markdown_frontmatter = 1  " for YAML format
+" let g:vim_markdown_toml_frontmatter = 1  " for TOML format
+" let g:vim_markdown_json_frontmatter = 1  " for JSON format
+
+" augroup pandoc_syntax
+"    au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
+" augroup END
+" Copilot
+
+let g:copilot_filetypes =  {
+                              \ 'go': v:true,
+								\ 'proto': v:true,
+                              \ }
+let b:copilot_enabled = 1
+
+let g:copilot_node_command  = "/Users/nartvt/.nvm/versions/node/v18.12.0/bin/node"
+
+imap <silent><script><expr> <C-J> copilot#Accept("<Tab>")
+let g:copilot_no_tab_map = v:true
+
+nnoremap <silent>cg :<Plug>(copilot-suggest)
+
+
+highlight CopilotSuggestion guifg=#555555 ctermfg=8
+
+" markdown preview
+let g:nvim_markdown_preview_theme = 'solarized-light'
+let g:nvim_markdown_preview_format = 'markdown'
+" end of markdown preview
+
+let g:tig_explorer_keymap_commit_edit    = '<ESC>o'
+let g:tig_explorer_keymap_commit_tabedit = '<ESC>t'
+let g:tig_explorer_keymap_commit_split   = '<ESC>s'
+let g:tig_explorer_keymap_commit_vsplit  = '<ESC>v'
+
+
+" let g:coc_global_extensions = ['coc-solargraph']
+
+" floaterm
+let g:floaterm_keymap_toggle = '<leader>cc'
+
+let g:floaterm_gitcommit='floaterm'
+let g:floaterm_width=0.9
+let g:floaterm_height=0.8
+let g:floaterm_wintitle=0
+let g:floaterm_autoclose=1
+let g:floaterm_completeoptPreview=0
+
+" MAP ANY JUMP
+" Show line numbers in search rusults
+let g:any_jump_list_numbers = 0
+
+" Auto search references
+let g:any_jump_references_enabled = 1
+
+" Auto group results by filename
+let g:any_jump_grouping_enabled = 1
+
+" Amount of preview lines for each search result
+let g:any_jump_preview_lines_count = 5
+
+" Max search results, other results can be opened via [a]
+let g:any_jump_max_search_results = 20
+
+" Prefered search engine: rg or ag
+let g:any_jump_search_prefered_engine = 'rg'
+
+" Search results list styles:
+let g:any_jump_results_ui_style = 'filename_first'
+
+" Any-jump window size & position options
+let g:any_jump_window_width_ratio  = 0.6
+let g:any_jump_window_height_ratio = 0.6
+let g:any_jump_window_top_offset   = 4
+
+" Customize any-jump colors with extending default color scheme:
+
+ let g:any_jump_colors = {
+       \"plain_text":         "Comment",
+       \"preview":            "Comment",
+       \"preview_keyword":    "Operator",
+       \"heading_text":       "Function",
+       \"heading_keyword":    "Identifier",
+       \"group_text":         "Comment",
+       \"group_name":         "Function",
+       \"more_button":        "Operator",
+       \"more_explain":       "Comment",
+       \"result_line_number": "Comment",
+       \"result_text":        "Statement",
+       \"result_path":        "String",
+       \"help":               "Comment"
+       \}
+
+" Disable default any-jump keybindings (default: 0)
+let g:any_jump_disable_default_keybindings = 1
+
+" Remove comments line from search results (default: 1)
+let g:any_jump_remove_comments_from_results = 1
+
+" Custom ignore files
+" default is: ['*.tmp', '*.temp']
+let g:any_jump_ignored_files = ['*.tmp', '*.temp', '.md', ".json"]
+
+" Search references only for current file type
+" (default: false, so will find keyword in all filetypes)
+let g:any_jump_references_only_for_current_filetype = 1
+
+" Disable search engine ignore vcs untracked files
+" (default: false, search engine will ignore vcs untracked files)
+let g:any_jump_disable_vcs_ignore = 1
+
+" gitgutter
+" un map all keys bindings of gitgutter then will map it again
+
+let g:coc_config_home = '/Users/nartvt/.config/nvim'
+
+" syntax enable
+let g:go_highlight_structs = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+"
+let g:go_highlight_function_calls = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_variable_declarations = 0
+let g:go_highlight_variable_assignments = 1
+let g:go_highlight_types = 1
+let g:go_def_mode = 'gopls'
+let g:go_info_mode='gopls'
+let autocommands_loaded = 1
+
+let NERDTreeShowHidden=1
+
+" GOLANG
+let g:go_fmt_command = "goimports"
+let g:go_metalinter_autosave_enabled = ['vet', 'golint']
+ augroup go-fmt-command
+    autocmd!
+    autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
+    autocmd BufWritePost *.go :GoBuild
+    autocmd BufWritePost *.go :set ft=go
+ augroup END
+
+filetype indent on
+set smartindent
+" autocmd BufRead,BufWritePre *.go normal gg=G
+
+" :AirlineTheme simple
+" https://github.com/vim-airline/vim-airline-themes/tree/master/autoload/airline/themes
+let g:airline_powerline_fonts = 1
+let g:airline_theme='durant'
+
+" Remember cursor position
+augroup vimrc-remember-cursor-position
+    autocmd!
+    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+augroup END
+
+" FZF
+
+" open full screen
+" let g:fzf_layout = { 'down': '100%', 'up': '100%'}
+
+" COMMAND
+ command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, '--smart-case --color-path="0;33"', {'options': '--delimiter : --nth 4..'}, <bang>0)
+
+" Lazy git
+nnoremap <silent> <leader>gg :LazyGit<CR>
+
+" nerdTree resize
+nnoremap <silent><leader>u :vertical resize +10<CR>
+nnoremap <silent><leader>d :vertical resize -10<CR>
+" nmap <leader>r :NERDTreeFocus<cr>R<c-w><c-p>
+
+" generator json tag for go struct
+let g:go_addtags_transform = 'camelcase'
+" let g:go_addtags_transform = 'snakecase'
+nnoremap <silent><leader>fj :GoAddTags json,omitempty bson,omitempty<CR>
+" nnoremap <silent><leader>fj :GoAddTags json,omitempty<CR>
+" nnoremap <silent><leader>fj :GoAddTags json<CR>
+nnoremap <silent><leader>fr :GoRemoveTags<CR>
+
+" NERDTree SETTING
+nnoremap <silent><C-n> :NERDTreeToggle<CR>
+nnoremap <silent><C-p> :FZF!<CR>
+nnoremap <silent><C-f> :NERDTreeFind<CR>
+
+" new coc config 0.0.82
+" TAB confirm auto config
+inoremap <silent><expr><tab> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<TAB>"
+" ENTER for confirm auto complete
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>"
+
+" view current open files
+" MAP
+nnoremap <silent> <leader>m :History<CR>
+"
+nnoremap <silent><leader>f :Ag<CR>
+nnoremap <silent><leader><leader> :noh<CR>
+nnoremap <silent><C-s> :w!<CR>
+nnoremap <silent><C-q> :q!<CR>
+
+" Better window navigation ctrl+h,j,k,l instead of ctrl+w+h,j,k,l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+nmap <silent><leader>tg :TigBlame<CR>
+" MAP COC
+
+xnoremap <silent>gd :AnyJumpVisual<CR>
+
+nnoremap <silent><C-g> :vsplit<CR>
+
+vmap <leader>ft  <Plug>(coc-format-selected)
+nmap <leader>fk  <Plug>(coc-format-selected)
+
+nmap <silent><leader>fc :set eventignore=BufWritePre<CR>
+nmap <silent><leader>fv :set eventignore=""<CR>
+
+autocmd! bufwritepost $HOME/.config/nvim/init.vim source %

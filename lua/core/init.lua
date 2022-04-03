@@ -1,0 +1,6 @@
+require("core.util")
+require('core.autocmds')
+require('core.options')
+require('core.java_func').JavaHighlight()
+require('core.java_func').JavaBuild()
+require('core.java_func').JavaSyntax()
