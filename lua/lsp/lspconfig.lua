@@ -1,33 +1,28 @@
--- LSP Configuration
+-- LSP Configuration for Neovim 0.11+
 local vim = vim
 local util = require("me.util")
--- local remap = util.remap
 
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
 local on_attach = require("lsp.common").on_attach
--- local server_name = "tsserver"
 local bin_name = "typescript-language-server"
 
 -- add completion capability
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
-local lspconfig = require("lspconfig")
-lspconfig["dartls"].setup {
+-- Common config applied to all servers
+local common_config = {
     on_attach = on_attach,
     capabilities = capabilities
 }
 
--- Configure JDTLS manually instead of using nvim-java
-local lombok_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls/lombok.jar"
+-- dartls
+vim.lsp.config.dartls = {
+    on_attach = on_attach,
+    capabilities = capabilities
+}
 
--- Don't setup JDTLS here - it should be handled by ftplugin/java.lua
--- lspconfig["jdtls"].setup({
---   This is now handled in ftplugin/java.lua
--- })
-
-lspconfig["gopls"].setup {
+-- gopls
+vim.lsp.config.gopls = {
     on_attach = on_attach,
     capabilities = capabilities,
     settings = {
@@ -40,7 +35,8 @@ lspconfig["gopls"].setup {
     }
 }
 
-lspconfig["pyright"].setup {
+-- pyright
+vim.lsp.config.pyright = {
     on_attach = on_attach,
     capabilities = capabilities,
     settings = {
@@ -52,53 +48,52 @@ lspconfig["pyright"].setup {
     }
 }
 
-lspconfig["solargraph"].setup {
+-- solargraph
+vim.lsp.config.solargraph = {
     on_attach = on_attach,
     capabilities = capabilities
 }
 
-lspconfig["svelte"].setup {
+-- svelte
+vim.lsp.config.svelte = {
     on_attach = on_attach,
     capabilities = capabilities
 }
 
--- lspconfig["tsserver"].setup {
-lspconfig["ts_ls"].setup {
-    on_attach = on_attach,
-    default_config = util.utf8_config {
-        cmd = { bin_name, "--stdio" },
-        filetypes = {
-            "javascript",
-            "javascriptreact",
-            "javascript.jsx",
-            "typescript",
-            "typescriptreact",
-            "typescript.tsx"
-        },
-        root_dir = util.root_pattern("package.json")
-    },
-    capabilities = capabilities
-}
-
-lspconfig["erlangls"].setup {
-    on_attach = on_attach,
-    capabilities = capabilities
-}
-
-lspconfig["lua_ls"].setup {
-    on_attach = on_attach,
-    capabilities = capabilities
-}
-
-lspconfig["metals"].setup {
+-- ts_ls (typescript)
+vim.lsp.config.ts_ls = {
     on_attach = on_attach,
     capabilities = capabilities,
-    cmd = {
-        "metals"
-    },
+    cmd = { bin_name, "--stdio" },
     filetypes = {
-        "scala"
+        "javascript",
+        "javascriptreact",
+        "javascript.jsx",
+        "typescript",
+        "typescriptreact",
+        "typescript.tsx"
     },
+    root_markers = { "package.json", "tsconfig.json", ".git" }
+}
+
+-- erlangls
+vim.lsp.config.erlangls = {
+    on_attach = on_attach,
+    capabilities = capabilities
+}
+
+-- lua_ls
+vim.lsp.config.lua_ls = {
+    on_attach = on_attach,
+    capabilities = capabilities
+}
+
+-- metals (scala)
+vim.lsp.config.metals = {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    cmd = { "metals" },
+    filetypes = { "scala" },
     init_options = {
         compilerOptions = {
             snippetAutoIndent = false
@@ -107,3 +102,16 @@ lspconfig["metals"].setup {
         statusBarProvider = "show-message"
     }
 }
+
+-- Enable the configured servers
+vim.lsp.enable({
+    "dartls",
+    "gopls",
+    "pyright",
+    "solargraph",
+    "svelte",
+    "ts_ls",
+    "erlangls",
+    "lua_ls",
+    "metals"
+})

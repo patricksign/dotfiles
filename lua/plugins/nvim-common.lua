@@ -1,6 +1,5 @@
 return {
     'godlygeek/tabular',
-    'itspriddle/vim-marked',
     'ixru/nvim-markdown',
     'leafOfTree/vim-svelte-plugin',
     'wbthomason/packer.nvim',
