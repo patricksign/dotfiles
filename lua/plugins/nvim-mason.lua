@@ -5,14 +5,7 @@ return {
       end,
       config = function()
         require("mason").setup({
-          ensure_installed = {
-            -- Java debugging tools
-            "java-debug-adapter",
-            "java-test",
-            "jdtls",
-            -- Other useful tools
-            "lombok-nightly",
-          }
+          ensure_installed = {}
         })
       end
     },

@@ -21,31 +21,6 @@ usercmd(
     { nargs = 1, bang = true }
 )
 
--- Format current Java method with IntelliJ style
-usercmd(
-    'FormatJavaMethod',
-    function()
-        if vim.bo.filetype == "java" then
-            local method_start, method_end = get_java_method_range()
-            if method_start and method_end and method_start ~= method_end then
-                vim.lsp.buf.format({
-                    range = {
-                        start = { method_start, 0 },
-                        ["end"] = { method_end, 0 }
-                    }
-                })
-                vim.notify("Formatted Java method (lines " .. method_start .. "-" .. method_end .. ")",
-                    vim.log.levels.INFO)
-            else
-                vim.notify("Could not detect method boundaries", vim.log.levels.WARN)
-            end
-        else
-            vim.notify("This command only works for Java files", vim.log.levels.WARN)
-        end
-    end,
-    { desc = "Format current Java method with IntelliJ style" }
-)
-
 -- Highlight on yank
 augroup('YankHighlight', { clear = true })
 autocmd('TextYankPost', {
@@ -99,29 +74,9 @@ autocmd('FileType', {
     command = "EmmetInstall"
 })
 
--- Java-specific indentation settings for 4-space tabs
+-- Enhanced auto-indentation for programming languages
 autocmd('FileType', {
-    pattern = 'java',
-    callback = function()
-        -- Set Java-specific indentation to 4 spaces
-        vim.bo.tabstop = 4                       -- Tab width is 4 spaces
-        vim.bo.shiftwidth = 4                    -- Indentation width is 4 spaces
-        vim.bo.softtabstop = 4                   -- Soft tab stop is 4 spaces
-        vim.bo.expandtab = true                  -- Use spaces instead of tabs
-        vim.bo.smartindent = true                -- Smart indentation for Java
-        vim.bo.cindent = true                    -- C-style indentation (good for Java)
-        vim.bo.cinoptions = "(0,u0,U0,t0,g0,N-s" -- Proper bracket indentation
-        vim.bo.cinkeys = "0{,0},0),0],!^F,o,O,e" -- Auto-indent triggers
-
-        -- Additional Java-specific settings
-        vim.bo.textwidth = 220        -- Line length for Java (IntelliJ default)
-        vim.bo.formatoptions = "tcqj" -- Auto-formatting options
-    end
-})
-
--- Enhanced auto-indentation for all programming languages
-autocmd('FileType', {
-    pattern = { 'javascript', 'typescript', 'lua', 'python', 'go', 'rust', 'c', 'cpp' },
+    pattern = { 'javascript', 'typescript', 'lua', 'go', 'html', 'css', 'vue' },
     callback = function()
         -- Enhanced 4-space indentation for all code
         vim.bo.tabstop = 4
@@ -235,56 +190,6 @@ usercmd(
     end,
     { desc = "Fix indentation issues in current buffer" }
 )
--- Language settings:
----------------------
--- Function to find the current Java method boundaries
-local function get_java_method_range()
-    local bufnr = vim.api.nvim_get_current_buf()
-    local cursor = vim.api.nvim_win_get_cursor(0)
-    local current_line = cursor[1]
-
-    -- Search backwards for method start (public/private/protected + method signature)
-    local method_start = current_line
-    for i = current_line, 1, -1 do
-        local line = vim.api.nvim_buf_get_lines(bufnr, i - 1, i, false)[1] or ""
-        if line:match("^%s*[%w%s]*%(public%s+|private%s+|protected%s+|static%s+|final%s+|abstract%s+%).*%w+%s*%(.*%)%s*{?%s*$") or
-            line:match("^%s*[%w%s]*%w+%s*%(.*%)%s*{%s*$") then
-            method_start = i
-            break
-        end
-    end
-
-    -- Search forwards for method end (closing brace at same indentation level)
-    local method_end = current_line
-    local brace_count = 0
-    local start_line_content = vim.api.nvim_buf_get_lines(bufnr, method_start - 1, method_start, false)[1] or ""
-    local base_indent = #start_line_content:match("^%s*")
-
-    for i = method_start, vim.api.nvim_buf_line_count(bufnr) do
-        local line = vim.api.nvim_buf_get_lines(bufnr, i - 1, i, false)[1] or ""
-
-        -- Count braces
-        for char in line:gmatch(".") do
-            if char == "{" then
-                brace_count = brace_count + 1
-            elseif char == "}" then
-                brace_count = brace_count - 1
-            end
-        end
-
-        -- If we're back to 0 braces and at base indentation, we found the method end
-        if brace_count <= 0 and i > method_start then
-            local line_indent = #line:match("^%s*")
-            if line_indent <= base_indent and line:match("}") then
-                method_end = i
-                break
-            end
-        end
-    end
-
-    return method_start, method_end
-end
-
 -- Autocmd for organizing imports on save for Go files
 autocmd('BufWritePre', {
     pattern = '*.go',
@@ -318,19 +223,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
         local filetype = vim.bo.filetype
 
         if vim.bo.modified == true and mode == 'n' then
-            if filetype == "java" then
-                -- Format only the current method for Java files
-                local method_start, method_end = get_java_method_range()
-                if method_start and method_end and method_start ~= method_end then
-                    vim.lsp.buf.format({
-                        range = {
-                            start = { method_start, 0 },
-                            ["end"] = { method_end, 0 }
-                        }
-                    })
-                end
-            elseif filetype ~= "lua" then
-                -- Format entire file for other languages (except lua)
+            if filetype ~= "lua" then
                 vim.lsp.buf.format()
             end
         end
@@ -343,18 +236,16 @@ usercmd(
     function()
         -- Create a test buffer with various indentation scenarios
         local test_lines = {
-            "class TestClass {",
-            "  public void method() {",
-            "if (condition) {",
-            "System.out.println('hello');",
+            "function testFunc() {",
+            "  if (condition) {",
+            "console.log('hello');",
             "}",
-            "  }",
             "}"
         }
 
         -- Create new buffer
         vim.cmd('new')
-        vim.bo.filetype = 'java'
+        vim.bo.filetype = 'javascript'
 
         -- Set the test content
         vim.api.nvim_buf_set_lines(0, 0, -1, false, test_lines)

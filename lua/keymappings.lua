@@ -107,8 +107,8 @@ remap("n", "<C-k>", "<C-w>k", bufopts, "Jump to top")
 remap("n", "<C-l>", "<C-w>l", bufopts, "Jump to right")
 remap("n", "<C-g>", "<cmd>:vsplit<cr>", bufopts, "vertical split")
 remap("n", "<C-e>", "<cmd>:lua vim.diagnostic.open_float()<cr>", bufopts, "load error multiline")
-vim.g.go_addtags_transform = 'snakecase' -- snakecase, camelcase
-remap("n", "<leader>fj", "<cmd>:GoAddTags json,omitempty<Cr>", bufopts, "generation json tag")
+vim.g.go_addtags_transform = 'snakecase'
+remap("n", "<leader>fj", "<cmd>:GoAddTags json,omitempty<Cr>", bufopts, "Go: generate json tag")
 
 -- telescope
 remap("n", "<leader>lc", "<cmd>:FZF!<cr>", bufopts, "Find file from current folfer")

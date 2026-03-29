@@ -11,7 +11,6 @@ return {
     require("plugins.nvim-fzf"),
     require("plugins.nvim-git"),
     require("plugins.nvim-go"),
-    require("plugins.nvim-java"),
     require("plugins.nvim-lsp"),
     require("plugins.nvim-lualine"),
     require("plugins.nvim-mason"),
@@ -19,7 +18,6 @@ return {
     require("plugins.nvim-noti"),
     require("plugins.nvim-oil"),
     require("plugins.nvim-outline"),
-    require("plugins.nvim-planuml"),
     require("plugins.nvim-rootter"),
     require("plugins.nvim-snip"),
     require("plugins.nvim-telescope"),
@@ -31,5 +29,4 @@ return {
     require("plugins.nvim-which-key"),
     require("plugins.nvim-wilder"),
     require("plugins.nvim-debug-enhanced"),
-    require("plugins.nvim-java-profiles"),
 }

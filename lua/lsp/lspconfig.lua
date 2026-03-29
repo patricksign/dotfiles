@@ -15,12 +15,6 @@ local common_config = {
     capabilities = capabilities
 }
 
--- dartls
-vim.lsp.config.dartls = {
-    on_attach = on_attach,
-    capabilities = capabilities
-}
-
 -- gopls
 vim.lsp.config.gopls = {
     on_attach = on_attach,
@@ -35,32 +29,7 @@ vim.lsp.config.gopls = {
     }
 }
 
--- pyright
-vim.lsp.config.pyright = {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    settings = {
-        pyright = {
-            analysis = {
-                useLibraryCodeForTypes = true
-            }
-        }
-    }
-}
-
--- solargraph
-vim.lsp.config.solargraph = {
-    on_attach = on_attach,
-    capabilities = capabilities
-}
-
--- svelte
-vim.lsp.config.svelte = {
-    on_attach = on_attach,
-    capabilities = capabilities
-}
-
--- ts_ls (typescript)
+-- ts_ls (typescript/javascript)
 vim.lsp.config.ts_ls = {
     on_attach = on_attach,
     capabilities = capabilities,
@@ -76,10 +45,16 @@ vim.lsp.config.ts_ls = {
     root_markers = { "package.json", "tsconfig.json", ".git" }
 }
 
--- erlangls
-vim.lsp.config.erlangls = {
+-- volar (Vue.js)
+vim.lsp.config.volar = {
     on_attach = on_attach,
-    capabilities = capabilities
+    capabilities = capabilities,
+    filetypes = { "vue" },
+    init_options = {
+        vue = {
+            hybridMode = false,
+        },
+    },
 }
 
 -- lua_ls
@@ -88,30 +63,10 @@ vim.lsp.config.lua_ls = {
     capabilities = capabilities
 }
 
--- metals (scala)
-vim.lsp.config.metals = {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    cmd = { "metals" },
-    filetypes = { "scala" },
-    init_options = {
-        compilerOptions = {
-            snippetAutoIndent = false
-        },
-        isHttpEnabled = true,
-        statusBarProvider = "show-message"
-    }
-}
-
 -- Enable the configured servers
 vim.lsp.enable({
-    "dartls",
     "gopls",
-    "pyright",
-    "solargraph",
-    "svelte",
     "ts_ls",
-    "erlangls",
+    "volar",
     "lua_ls",
-    "metals"
 })
