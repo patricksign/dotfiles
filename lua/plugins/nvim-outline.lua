@@ -1,8 +1,11 @@
 return {
-    'simrat39/symbols-outline.nvim',
+    'hedyhli/outline.nvim',
+    cmd = { 'Outline', 'OutlineOpen' },
     config = function()
-        require("symbols-outline").setup {
-            auto_close = true,
+        require("outline").setup {
+            outline_window = {
+                auto_close = true,
+            },
         }
     end
 }

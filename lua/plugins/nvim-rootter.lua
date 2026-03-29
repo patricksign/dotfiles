@@ -1,6 +1,9 @@
 return {
-     'ahmedkhalf/lsp-rooter.nvim',
+    'ahmedkhalf/project.nvim',
     config = function()
-      require('lsp-rooter').setup()
+        require('project_nvim').setup({
+            detection_methods = { 'lsp', 'pattern' },
+            patterns = { '.git', 'Makefile', 'go.mod', 'pom.xml', 'package.json' },
+        })
     end
 }

@@ -160,8 +160,8 @@ remap("n", "<leader>xx", "<cmd>TroubleToggle<cr>", bufopts, "Display errors")
 remap("n", "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>", bufopts, "Display workspace errors")
 remap("n", "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>", bufopts, "Display document errors")
 
--- symbols-outline
-remap("n", "<leader>o", "<cmd>SymbolsOutline<cr>", bufopts, "Show symbols")
+-- outline
+remap("n", "<leader>o", "<cmd>Outline<cr>", bufopts, "Show symbols")
 
 -- oil
 remap("n", "<leader>n", "<cmd>Oil<cr>", bufopts, "Oil")
