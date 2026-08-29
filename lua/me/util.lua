@@ -33,9 +33,7 @@ M.default_config = {
 }
 
 function M.validate_bufnr(bufnr)
-    validate {
-        bufnr = { bufnr, 'n' }
-    }
+    validate('bufnr', bufnr, 'number')
     return bufnr == 0 and api.nvim_get_current_buf() or bufnr
 end
 
@@ -64,12 +62,12 @@ function M.add_hook_after(func, new_fn)
 end
 
 function M.tbl_deep_extend(dst, ...)
-    validate { dst = { dst, 't' } }
+    validate('dst', dst, 'table')
     for i = 1, select("#", ...) do
         local t = select(i, ...)
-        validate { arg = { t, 't' } }
+        validate('arg', t, 'table')
         for k, v in pairs(t) do
-            if type(v) == 'table' and not vim.tbl_islist(v) then
+            if type(v) == 'table' and not vim.islist(v) then
                 dst[k] = M.tbl_deep_extend(dst[k] or vim.empty_dict(), v)
             else
                 dst[k] = v
@@ -80,7 +78,7 @@ function M.tbl_deep_extend(dst, ...)
 end
 
 function M.nvim_multiline_command(command)
-    validate { command = { command, 's' } }
+    validate('command', command, 'string')
     for line in vim.gsplit(command, "\n", true) do
         api.nvim_command(line)
     end
@@ -178,7 +176,7 @@ M.path = (function()
     local function path_join(...)
         local result =
             table.concat(
-                vim.tbl_flatten { ... }, path_sep):gsub(path_sep .. "+", path_sep)
+                vim.iter({ ... }):flatten():totable(), path_sep):gsub(path_sep .. "+", path_sep)
         return result
     end
 
@@ -282,7 +280,7 @@ function M.server_per_root_dir_manager(_make_config)
 end
 
 function M.search_ancestors(startpath, func)
-    validate { func = { func, 'f' } }
+    validate('func', func, 'callable')
     if func(startpath) then return startpath end
     for path in M.path.iterate_parents(startpath) do
         if func(path) then return path end
@@ -290,7 +288,7 @@ function M.search_ancestors(startpath, func)
 end
 
 function M.root_pattern(...)
-    local patterns = vim.tbl_flatten { ... }
+    local patterns = vim.iter({ ... }):flatten():totable()
     local function matcher(path)
         for _, pattern in ipairs(patterns) do
             if M.path.exists(M.path.join(path, pattern)) then
@@ -352,12 +350,10 @@ end
 local base_install_dir = M.path.join(fn.stdpath("cache"), "nvim_lsp")
 M.base_install_dir = base_install_dir
 function M.npm_installer(config)
-    validate {
-        server_name = { config.server_name, 's' },
-        packages = { config.packages, validate_string_list, 'List of npm package names' },
-        binaries = { config.binaries, validate_string_list, 'List of binary names' },
-        post_install_script = { config.post_install_script, 's', true },
-    }
+    validate('server_name', config.server_name, 'string')
+    validate('packages', config.packages, validate_string_list, false, 'List of npm package names')
+    validate('binaries', config.binaries, validate_string_list, false, 'List of binary names')
+    validate('post_install_script', config.post_install_script, 'string', true)
 
     local install_dir = M.path.join(base_install_dir, config.server_name)
     local bin_dir = M.path.join(install_dir, "node_modules", ".bin")

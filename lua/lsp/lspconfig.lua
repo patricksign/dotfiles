@@ -45,8 +45,8 @@ vim.lsp.config.ts_ls = {
     root_markers = { "package.json", "tsconfig.json", ".git" }
 }
 
--- volar (Vue.js)
-vim.lsp.config.volar = {
+-- vue_ls (Vue.js)
+vim.lsp.config.vue_ls = {
     on_attach = on_attach,
     capabilities = capabilities,
     filetypes = { "vue" },
@@ -67,6 +67,6 @@ vim.lsp.config.lua_ls = {
 vim.lsp.enable({
     "gopls",
     "ts_ls",
-    "volar",
+    "vue_ls",
     "lua_ls",
 })

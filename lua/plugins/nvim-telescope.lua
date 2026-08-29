@@ -1,6 +1,6 @@
 return {
     'nvim-telescope/telescope.nvim',
-    branch = '0.1.x',
+    branch = 'master',
     dependencies = {
         'nvim-telescope/telescope-dap.nvim',
         { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
